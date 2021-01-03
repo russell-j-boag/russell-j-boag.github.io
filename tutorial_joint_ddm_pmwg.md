@@ -3,7 +3,7 @@ Tutorial script for multiple-task joint modeling with the PMwG sampler
 
 ## Overview
 
-This code constructs a joint model of two simulated behavioural
+This R code constructs a joint model of two simulated behavioural
 datasets. It can be extended to N tasks and multiple data sources per
 subject (e.g., EEG + choice-RT + fMRI). The code and variable names in
 this script are intended to be as general as possible to allow easy
@@ -831,7 +831,7 @@ sampled <- run_stage(
 save(sampled, file = "samples/samples_ddm_combined_test.RData")
 ```
 
-#### Next steps
+## Next steps
 
 Now that we have our samples, we would now run sampling diagnositics,
 check model fit by simulating posterior predictives, and exploring

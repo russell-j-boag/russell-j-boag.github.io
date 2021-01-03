@@ -369,7 +369,7 @@ summary {
 
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>This code constructs a joint model of two simulated behavioural datasets. It can be extended to N tasks and multiple data sources per subject (e.g., EEG + choice-RT + fMRI). The code and variable names in this script are intended to be as general as possible to allow easy modification and to let users ‘plug in’ their own experimental designs and models as straightforwardly as possible.</p>
+<p>This R code constructs a joint model of two simulated behavioural datasets. It can be extended to N tasks and multiple data sources per subject (e.g., EEG + choice-RT + fMRI). The code and variable names in this script are intended to be as general as possible to allow easy modification and to let users ‘plug in’ their own experimental designs and models as straightforwardly as possible.</p>
 <div id="the-building-blocks" class="section level4">
 <h4>The building blocks</h4>
 <p>The script starts by creating an experimental design matrix (an N x M data frame representing N trials of M experimental factors). The design matrix encodes the features of the experimental design (e.g., subject, stimulus, condition, etc.) on each trial. This is useful for simulating and plotting data, and for computing variables based on your particular experimental design. As such, the most important objects in the script are the data frames <code>data</code>, <code>design</code>, and <code>sims</code>. These all have the same form as the design matrix (i.e., <code>data</code> and <code>sims</code> are the design matrix with additional columns of observed or simulated outcomes, such as ‘rt’ and ‘response’. These objects can thus be passed interchangeably to the likelihood and sampling functions for different purposes (e.g., fitting to data, simulating out of a model, generating hypothetical data).</p>
@@ -1002,11 +1002,11 @@ sims</code></pre>
 <h4>Save to samples directory</h4>
 <pre class="r"><code>save(sampled, file = &quot;samples/samples_ddm_combined_test.RData&quot;)</code></pre>
 </div>
-<div id="next-steps" class="section level4">
-<h4>Next steps</h4>
+</div>
+<div id="next-steps" class="section level2">
+<h2>Next steps</h2>
 <p>Now that we have our samples, we would now run sampling diagnositics, check model fit by simulating posterior predictives, and exploring relationships between tasks and models. Future versions of this tutorial will include convenience functions and example code for performing these analyses.</p>
 <p>See <a href="https://newcastlecl.github.io/samplerDoc/" class="uri">https://newcastlecl.github.io/samplerDoc/</a> for further information about the PMwG sampler.</p>
-</div>
 </div>
 
 
