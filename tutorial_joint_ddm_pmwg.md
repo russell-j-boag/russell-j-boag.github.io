@@ -833,11 +833,11 @@ save(sampled, file = "samples/samples_ddm_combined_test.RData")
 
 ## Next steps
 
-Now that we have our samples, we would now run sampling diagnositics,
-check model fit by simulating posterior predictives, and exploring
-relationships between tasks and models. Future versions of this tutorial
-will include convenience functions and example code for performing these
-analyses.
+Now that we have our samples, we can run sampling diagnositics, check
+model fit by simulating posterior predictives, and explore relationships
+between parameters for different tasks and models. Future versions of
+this tutorial will include convenience functions and example code for
+performing such analyses.
 
 See <https://newcastlecl.github.io/samplerDoc/> for further information
 about the PMwG sampler.
