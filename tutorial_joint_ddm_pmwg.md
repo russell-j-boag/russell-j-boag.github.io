@@ -831,7 +831,7 @@ sampled <- run_stage(
 save(sampled, file = "samples/samples_ddm_combined_test.RData")
 ```
 
-#### Next steps
+## Next steps
 
 Now that we have our samples, we would now run sampling diagnositics,
 check model fit by simulating posterior predictives, and exploring
