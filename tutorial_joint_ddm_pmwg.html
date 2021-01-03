@@ -367,25 +367,21 @@ summary {
 </div>
 
 
-<pre class="r"><code>knitr::opts_chunk$set( 
-  eval = FALSE,
-  echo = TRUE
-)</code></pre>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
 <p>This code constructs a joint model of two simulated behavioural datasets. It can be extended to N tasks and multiple data sources per subject (e.g., EEG + choice-RT + fMRI). The code and variable names in this script are intended to be as general as possible to allow easy modification and to let users ‘plug in’ their own experimental designs and models as straightforwardly as possible.</p>
-<div id="the-building-blocks" class="section level5">
-<h5>The building blocks</h5>
+<div id="the-building-blocks" class="section level4">
+<h4>The building blocks</h4>
 <p>The script starts by creating an experimental design matrix (an N x M data frame representing N trials of M experimental factors). The design matrix encodes the features of the experimental design (e.g., subject, stimulus, condition, etc.) on each trial. This is useful for simulating and plotting data, and for computing variables based on your particular experimental design. As such, the most important objects in the script are the data frames <code>data</code>, <code>design</code>, and <code>sims</code>. These all have the same form as the design matrix (i.e., <code>data</code> and <code>sims</code> are the design matrix with additional columns of observed or simulated outcomes, such as ‘rt’ and ‘response’. These objects can thus be passed interchangeably to the likelihood and sampling functions for different purposes (e.g., fitting to data, simulating out of a model, generating hypothetical data).</p>
 </div>
-<div id="the-likelihood-function" class="section level5">
-<h5>The likelihood function</h5>
+<div id="the-likelihood-function" class="section level4">
+<h4>The likelihood function</h4>
 <p>At the heart of this code is the likelihood function. The likelihood function iterates over each trial in the design and computes either 1) the likelihood of the current observation in <code>data</code> given the current parameter values, or 2) a simulated observation generated from the model given the current parameters and cell of the experimental design.</p>
 <p>The bulk of the work when building a new model is writing the likelihood function. It is easiest to first write (and debug) the ‘stand alone’ likelihood of the model as applied to a single trial (row) in the data. From there you can easily iterate over trials using a for loop. Likelihood functions for many designs can be made faster by ‘vectorizing’ over observations that share a cell in the design matrix (e.g., with a single call to <code>dLBA()</code>, <code>dnorm()</code>, <code>ddiffusion()</code>, etc.). However, the loop method has the advantage of being more intuitive and easier to debug in in the initial stages of writing a model (despite its longer compute time).</p>
 <p>Constructing a joint likelihood (e.g., the likelihood of N models of N data sets) simply involves putting each model’s likelihood loop inside the same likelihood function and passing that function a named list of data frames (e.g., the list <code>data</code> containing data frames <code>data$task1</code>, <code>data$task2</code>, <code>data$task3</code>, etc.). The returned likelihood is then just the grand sum of each model’s individual summed likelihood. Functions for simulating out of the models are computed in the same manner as the single case and are returned as a list of data frames (one for each task/model) at the end of the function.</p>
 </div>
-<div id="the-sampler" class="section level5">
-<h5>The sampler</h5>
+<div id="the-sampler" class="section level4">
+<h4>The sampler</h4>
 <p>Running the Particle Metropolis within Gibbs (PMwG) sampler is straightforward - you simply pass the <code>data</code> (or <code>sims</code>) object, the likelihood function, and a vector of parameter names as arguments. See <a href="https://newcastlecl.github.io/samplerDoc/" class="uri">https://newcastlecl.github.io/samplerDoc/</a> for further information about the sampler.</p>
 <p>When working with a single model, covariation among parameters is accounted for hierarchically, via a multivariate normal distribution. The multivariate normal has a mean vector containing the hyper-level means of each parameter and variance-covariance matrix representing parameter correlations. When working with multiple models simultaneously (i.e., joint modeling), the mean vector is simply the union (concatenation) of each model’s individual mean vector (e.g., <code>all.means &lt;- c(m1.means, m2.means)</code>). The covariance matrix is similarly constructed based on this extended means vector. Variance shared among different tasks is thus accounted for hierarchically under the same overarching multivariate normal.</p>
 <p><strong>TO DO</strong>: Add convenience functions for plotting parameter samples, model fits, posterior predictives/parameter recovery/model exploration, heatmap of hyper var-covar matrix, etc.</p>
@@ -393,34 +389,34 @@ summary {
 </div>
 <div id="setup-environment" class="section level2">
 <h2>Setup environment</h2>
-<div id="clear-workspace" class="section level5">
-<h5>Clear workspace</h5>
+<div id="clear-workspace" class="section level4">
+<h4>Clear workspace</h4>
 <pre class="r"><code>rm(list=ls())</code></pre>
 </div>
-<div id="set-working-directory" class="section level5">
-<h5>Set working directory</h5>
+<div id="set-working-directory" class="section level4">
+<h4>Set working directory</h4>
 <pre class="r"><code>getwd()
 main_dir &lt;- c(&quot;~/Documents/Github/PMwG&quot;)
 setwd(file.path(main_dir))</code></pre>
 </div>
-<div id="create-subdirectory-structure" class="section level5">
-<h5>Create subdirectory structure</h5>
+<div id="create-subdirectory-structure" class="section level4">
+<h4>Create subdirectory structure</h4>
 <p>This will not overwrite if dir already exists.</p>
 <pre class="r"><code>sub_dirs &lt;- list(&quot;samples&quot;, &quot;plots&quot;, &quot;data&quot;)
 lapply(sub_dirs, function (x) dir.create(file.path(main_dir, x), showWarnings = FALSE))</code></pre>
 </div>
-<div id="load-packages" class="section level5">
-<h5>Load packages</h5>
+<div id="load-packages" class="section level4">
+<h4>Load packages</h4>
 <pre class="r"><code>library(tidyverse)
 library(rtdists)
 library(pmwg)</code></pre>
 </div>
-<div id="set-seed-for-random-number-reproducibility" class="section level5">
-<h5>Set seed for random number reproducibility</h5>
+<div id="set-seed-for-random-number-reproducibility" class="section level4">
+<h4>Set seed for random number reproducibility</h4>
 <pre class="r"><code>set.seed(101)</code></pre>
 </div>
-<div id="create-some-empty-storage-objects" class="section level5">
-<h5>Create some empty storage objects</h5>
+<div id="create-some-empty-storage-objects" class="section level4">
+<h4>Create some empty storage objects</h4>
 <pre class="r"><code>design &lt;- list()
 data &lt;- list()
 p_names &lt;- list()
@@ -434,8 +430,8 @@ sims &lt;- list()</code></pre>
 <div id="setup-task-1" class="section level2">
 <h2>Setup Task 1</h2>
 <p>Before building the combined joint model, we will first build up and test all the necessary pieces (e.g., design, data, likelihood) for each task/model separately. We will combine them in the final step once we are confident the individual pieces each work correctly.</p>
-<div id="make-experimental-design-matrix-for-task-1" class="section level5">
-<h5>Make experimental design matrix for Task 1</h5>
+<div id="make-experimental-design-matrix-for-task-1" class="section level4">
+<h4>Make experimental design matrix for Task 1</h4>
 <p>Here we create an N x M data frame of our experimental design. Each row represents one observation or trial and each column is a factor whose levels code the experimental conditions for each trial. For example, the following generates a design matrix for a simple 2 x 2 (stimulus x cue condition) speed-accuracy trade-off experiment with column factors <code>subject</code>, <code>stim</code>, and <code>cond1</code>. Fully factorial designs are particularly easy to create by passing vectors of subjects and factor levels to <code>expand_grid()</code>. More complex and unbalanced designs, and designs containing randomization or sequential effects, may need to be constructed manually (e.g., by assigning to cells the output of <code>sample()</code> or <code>ifelse()</code>).</p>
 <pre class="r"><code>n_subs_t1 &lt;- 5  # n subjects
 n_obs_t1 &lt;- 40  # n observations (trials) per subject per design cell
@@ -446,8 +442,8 @@ design$t1 &lt;- expand_grid(subject = factor(rep(1:n_subs_t1, each = n_obs_t1)),
 design$t1</code></pre>
 <p>Here we pass our factor levels to <code>expand_grid()</code> to generate a factorial combination of all subjects, stimuli, and speed-accuracy cue conditions. Note that your empirical data should also be in a similarly tidy format with column names and factor levels that match those in your likelihood function.</p>
 </div>
-<div id="create-a-vector-of-parameter-names" class="section level5">
-<h5>Create a vector of parameter names</h5>
+<div id="create-a-vector-of-parameter-names" class="section level4">
+<h4>Create a vector of parameter names</h4>
 <p>Now we want to create a named vector containing all the unique estimated parameters in our design. First we extract the factor levels over which the parameters will vary. This is done by passing a vector of factor levels to <code>str_c()</code>, which appends them to the name of the target parameter. This creates a unique text string label for each parameter in the design. The likelihood and sampling functions use this to lookup parameters and pull out corresponding values. Ultimately, this lets us pass multiple similar models to the sampling functions without naming conflicts. Here we let a and v vary over condition and keep t0 fixed (i.e., we don’t pass it any factor levels via <code>unique()</code>).</p>
 <pre class="r"><code>p_names$t1 &lt;- c(str_c(&quot;t1.a&quot;, unique(design$t1$cond1), sep = &quot;.&quot;), 
                 str_c(&quot;t1.v&quot;, unique(design$t1$cond1), sep = &quot;.&quot;),
@@ -455,8 +451,8 @@ design$t1</code></pre>
                 )
 p_names$t1</code></pre>
 </div>
-<div id="set-mean-parameter-values-to-simulate-from-or-to-use-as-priors" class="section level5">
-<h5>Set mean parameter values to simulate from (or to use as priors)</h5>
+<div id="set-mean-parameter-values-to-simulate-from-or-to-use-as-priors" class="section level4">
+<h4>Set mean parameter values to simulate from (or to use as priors)</h4>
 <p>Note that (for now) the values of unestimated constants are set inside the likelihood function.</p>
 <pre class="r"><code>p_vector$t1 &lt;- c(2.0, 3.0,  # a's
                  1.0, 1.5,  # v's
@@ -479,8 +475,8 @@ names(p_vector$t1)</code></pre>
 </ol>
 <p>Adding a model to the function involves adding its likelihood loop to the ‘Likelihood loops’ block and appending the result to the <code>data</code> and <code>out</code> objects before returning the simulated data or computing the summed log-likelihood.</p>
 <p>Notice that the relevant data is indexed by name (e.g., <code>data$t1$rt</code>). This makes adding additional data sources easy - you simply append the new data source to the data list and give it a name (e.g., <code>data$t1_EEG</code>, <code>data$t2_BOLD</code>). Then refer to it by that name when writing the likelihood function.</p>
-<div id="likelihood-function-for-diffusion-model-of-task-1" class="section level5">
-<h5>Likelihood function for diffusion model of Task 1</h5>
+<div id="likelihood-function-for-diffusion-model-of-task-1" class="section level4">
+<h4>Likelihood function for diffusion model of Task 1</h4>
 <pre class="r"><code>ll_t1_ddm &lt;- function(x, data, sample = FALSE) {
   # This function takes the following inputs:
   # 1. x = the (log of) a named vector of starting parameters.
@@ -570,16 +566,16 @@ names(p_vector$t1)</code></pre>
 <div id="test-likelihood-function" class="section level2">
 <h2>Test likelihood function</h2>
 <p>Here we check that our likelihood function returns the expected items (i.e., a simulated data frame or a summed log-likelihood).</p>
-<div id="simulate-data-from-the-design-matrix" class="section level5">
-<h5>Simulate data from the design matrix</h5>
+<div id="simulate-data-from-the-design-matrix" class="section level4">
+<h4>Simulate data from the design matrix</h4>
 <pre class="r"><code>sims$t1 &lt;- ll_t1_ddm(x = log(p_vector$t1), 
                      data = design, 
                      sample = TRUE
                      )
 sims$t1</code></pre>
 </div>
-<div id="return-likelihood" class="section level5">
-<h5>Return likelihood</h5>
+<div id="return-likelihood" class="section level4">
+<h4>Return likelihood</h4>
 <pre class="r"><code>ll_t1_ddm(x = log(p_vector$t1), 
           data = sims, 
           sample = FALSE
@@ -588,24 +584,24 @@ sims$t1</code></pre>
 </div>
 <div id="explore-data" class="section level2">
 <h2>Explore data</h2>
-<div id="load-data" class="section level5">
-<h5>Load data</h5>
+<div id="load-data" class="section level4">
+<h4>Load data</h4>
 <p>Here we would usually read in and tidy up our empirical data to get it into a similar format as the data frame we just simulated and stored in <code>sims</code>. For now let’s just use the simulated data as our <code>data</code>.</p>
 <pre class="r"><code>data &lt;- sims
 data$t1</code></pre>
 </div>
-<div id="cell-counts" class="section level5">
-<h5>Cell counts</h5>
+<div id="cell-counts" class="section level4">
+<h4>Cell counts</h4>
 <pre class="r"><code>table(data$t1$stim, data$t1$cond1)</code></pre>
 </div>
-<div id="mean-rt" class="section level5">
-<h5>Mean RT</h5>
+<div id="mean-rt" class="section level4">
+<h4>Mean RT</h4>
 <pre class="r"><code>data$t1 %&gt;% 
   group_by(stim, cond1) %&gt;% 
   summarise(rt = mean(rt))</code></pre>
 </div>
-<div id="rt-histogram" class="section level5">
-<h5>RT histogram</h5>
+<div id="rt-histogram" class="section level4">
+<h4>RT histogram</h4>
 <pre class="r"><code>data$t1 %&gt;%
   ggplot(aes(x = rt, fill = stim)) +
   geom_histogram(stat = 'bin') +
@@ -618,8 +614,8 @@ data$t1</code></pre>
 </div>
 <div id="setup-task-2" class="section level2">
 <h2>Setup Task 2</h2>
-<div id="make-experimental-design-matrix-for-task-2" class="section level5">
-<h5>Make experimental design matrix for Task 2</h5>
+<div id="make-experimental-design-matrix-for-task-2" class="section level4">
+<h4>Make experimental design matrix for Task 2</h4>
 <pre class="r"><code>n_subs_t2 &lt;- 5
 n_obs_t2 &lt;- 40
 design$t2 &lt;- expand_grid(subject = factor(rep(1:n_subs_t2, each = n_obs_t2)), 
@@ -628,16 +624,16 @@ design$t2 &lt;- expand_grid(subject = factor(rep(1:n_subs_t2, each = n_obs_t2)),
 )
 design$t2</code></pre>
 </div>
-<div id="create-a-vector-of-parameter-names-1" class="section level5">
-<h5>Create a vector of parameter names</h5>
+<div id="create-a-vector-of-parameter-names-1" class="section level4">
+<h4>Create a vector of parameter names</h4>
 <pre class="r"><code>p_names$t2 &lt;- c(str_c(&quot;t2.a&quot;, unique(design$t2$cond1), sep = &quot;.&quot;),
                 str_c(&quot;t2.v&quot;, unique(design$t2$cond1), sep = &quot;.&quot;),
                 str_c(&quot;t2.t0&quot;, sep = &quot;.&quot;)
                 )
 p_names$t2</code></pre>
 </div>
-<div id="set-mean-parameter-values-to-simulate-from-or-to-use-as-priors-1" class="section level5">
-<h5>Set mean parameter values to simulate from (or to use as priors)</h5>
+<div id="set-mean-parameter-values-to-simulate-from-or-to-use-as-priors-1" class="section level4">
+<h4>Set mean parameter values to simulate from (or to use as priors)</h4>
 <p>Note that (for now) the values of unestimated constants are set inside the likelihood function. Here we will just set them to half of model 1’s values.</p>
 <pre class="r"><code>p_vector$t2 &lt;- c(2.0, 3.0,  # a's
                  1.0, 1.5,  # v's
@@ -649,8 +645,8 @@ p_vector$t2</code></pre>
 </div>
 <div id="likelihood-function-task-2" class="section level2">
 <h2>Likelihood function Task 2</h2>
-<div id="likelihood-function-for-diffusion-model-of-task-2" class="section level5">
-<h5>Likelihood function for diffusion model of Task 2</h5>
+<div id="likelihood-function-for-diffusion-model-of-task-2" class="section level4">
+<h4>Likelihood function for diffusion model of Task 2</h4>
 <pre class="r"><code>ll_t2_ddm &lt;- function(x, data, sample = FALSE) {
   # This function takes the following inputs:
   # 1. x = the (log of) a named vector of starting parameters.
@@ -734,16 +730,16 @@ p_vector$t2</code></pre>
 </div>
 <div id="test-likelihood-function-1" class="section level2">
 <h2>Test likelihood function</h2>
-<div id="simulate-data-from-the-design-matrix-1" class="section level5">
-<h5>Simulate data from the design matrix</h5>
+<div id="simulate-data-from-the-design-matrix-1" class="section level4">
+<h4>Simulate data from the design matrix</h4>
 <pre class="r"><code>sims$t2 &lt;- ll_t2_ddm(x = log(p_vector$t2), 
                      data = design, 
                      sample = TRUE
                      )
 sims$t2</code></pre>
 </div>
-<div id="return-likelihood-1" class="section level5">
-<h5>Return likelihood</h5>
+<div id="return-likelihood-1" class="section level4">
+<h4>Return likelihood</h4>
 <pre class="r"><code>ll_t2_ddm(x = log(p_vector$t2), 
           data = sims, 
           sample = FALSE
@@ -755,18 +751,18 @@ sims$t2</code></pre>
 <p>Again we treat <code>sims</code> as <code>data</code></p>
 <pre class="r"><code>data &lt;- sims
 data$t2</code></pre>
-<div id="cell-counts-1" class="section level5">
-<h5>Cell counts</h5>
+<div id="cell-counts-1" class="section level4">
+<h4>Cell counts</h4>
 <pre class="r"><code>table(data$t2$stim, data$t2$cond1)</code></pre>
 </div>
-<div id="mean-rt-1" class="section level5">
-<h5>Mean RT</h5>
+<div id="mean-rt-1" class="section level4">
+<h4>Mean RT</h4>
 <pre class="r"><code>data$t2 %&gt;% 
   group_by(stim, cond1) %&gt;% 
   summarise(rt = mean(rt))</code></pre>
 </div>
-<div id="rt-histogram-1" class="section level5">
-<h5>RT histogram</h5>
+<div id="rt-histogram-1" class="section level4">
+<h4>RT histogram</h4>
 <pre class="r"><code>data$t2 %&gt;%
   ggplot(aes(x = rt, fill = stim)) +
   geom_histogram(stat = 'bin') +
@@ -778,21 +774,21 @@ data$t2</code></pre>
 <div id="create-joint-model" class="section level2">
 <h2>Create joint model</h2>
 <p>Now we are ready to combine the two models into a single likelihood. First let’s make a combined parameter vector containing all parameters.</p>
-<div id="make-combined-parameter-vector" class="section level5">
-<h5>Make combined parameter vector</h5>
+<div id="make-combined-parameter-vector" class="section level4">
+<h4>Make combined parameter vector</h4>
 <pre class="r"><code>p_vector &lt;- c(p_vector$t1, p_vector$t2)
 p_vector</code></pre>
 </div>
 </div>
 <div id="setup-for-sampling" class="section level2">
 <h2>Setup for sampling</h2>
-<div id="get-the-names-of-the-parameters-we-want-to-sample" class="section level5">
-<h5>Get the names of the parameters we want to sample</h5>
+<div id="get-the-names-of-the-parameters-we-want-to-sample" class="section level4">
+<h4>Get the names of the parameters we want to sample</h4>
 <pre class="r"><code>pars &lt;- names(p_vector)
 pars</code></pre>
 </div>
-<div id="set-priors-for-the-mean-and-variance-of-hyper-level-multivariate-normal" class="section level5">
-<h5>Set priors for the mean and variance of hyper-level multivariate normal</h5>
+<div id="set-priors-for-the-mean-and-variance-of-hyper-level-multivariate-normal" class="section level4">
+<h4>Set priors for the mean and variance of hyper-level multivariate normal</h4>
 <pre class="r"><code>priors &lt;- list(
   theta_mu_mean = rep(0, length(pars)),
   theta_mu_var = diag(rep(1, length(pars)))
@@ -802,8 +798,8 @@ priors</code></pre>
 </div>
 <div id="joint-likelihood-function" class="section level2">
 <h2>Joint likelihood function</h2>
-<div id="likelihood-function-for-joint-diffusion-model-of-tasks-1-2" class="section level5">
-<h5>Likelihood function for joint diffusion model of Tasks 1 &amp; 2</h5>
+<div id="likelihood-function-for-joint-diffusion-model-of-tasks-1-2" class="section level4">
+<h4>Likelihood function for joint diffusion model of Tasks 1 &amp; 2</h4>
 <pre class="r"><code>ll_joint_ddm &lt;- function(x, data, sample = FALSE) {
   # This function takes the following inputs:
   # 1. x = the (log of) a named vector of starting parameters
@@ -929,20 +925,20 @@ priors</code></pre>
 </div>
 <div id="test-likelihood-function-2" class="section level2">
 <h2>Test likelihood function</h2>
-<div id="simulate-data-from-the-design-matrix-2" class="section level5">
-<h5>Simulate data from the design matrix</h5>
+<div id="simulate-data-from-the-design-matrix-2" class="section level4">
+<h4>Simulate data from the design matrix</h4>
 <pre class="r"><code>sims &lt;- ll_joint_ddm(x = log(p_vector), data = data, sample = TRUE)
 sims</code></pre>
 </div>
-<div id="return-likelihood-2" class="section level5">
-<h5>Return likelihood</h5>
+<div id="return-likelihood-2" class="section level4">
+<h4>Return likelihood</h4>
 <pre class="r"><code>ll_joint_ddm(x = log(p_vector), data = sims, sample = FALSE)</code></pre>
 </div>
 </div>
 <div id="setup-sampling" class="section level2">
 <h2>Setup sampling</h2>
-<div id="initialize-sampler" class="section level5">
-<h5>Initialize sampler</h5>
+<div id="initialize-sampler" class="section level4">
+<h4>Initialize sampler</h4>
 <pre class="r"><code>sampler &lt;- pmwgs(
   data = data,
   pars = pars,
@@ -950,15 +946,15 @@ sims</code></pre>
   ll_func = ll_joint_ddm
 )</code></pre>
 </div>
-<div id="set-start-points-optional" class="section level5">
-<h5>Set start points (optional)</h5>
+<div id="set-start-points-optional" class="section level4">
+<h4>Set start points (optional)</h4>
 <pre class="r"><code>start_points &lt;- list(
   mu = log(p_vector),
   sig2 = diag(rep(.01, length(pars)))
 )</code></pre>
 </div>
-<div id="initialize-start-points" class="section level5">
-<h5>Initialize start points</h5>
+<div id="initialize-start-points" class="section level4">
+<h4>Initialize start points</h4>
 <pre class="r"><code>sampler &lt;- init(
   sampler, 
   start_mu = start_points$mu,
@@ -969,8 +965,8 @@ sims</code></pre>
 <div id="run-sampling" class="section level2">
 <h2>Run sampling</h2>
 <p>Note that for large models, the following stages are best run in parallel on a research computing/server grid.</p>
-<div id="stage-1-burn-in" class="section level5">
-<h5>Stage 1: Burn-in</h5>
+<div id="stage-1-burn-in" class="section level4">
+<h4>Stage 1: Burn-in</h4>
 <pre class="r"><code>burned &lt;- run_stage(
   sampler, 
   stage = &quot;burn&quot;,
@@ -980,8 +976,8 @@ sims</code></pre>
   n_cores = 10
 )</code></pre>
 </div>
-<div id="stage-2-adaptation" class="section level5">
-<h5>Stage 2: Adaptation</h5>
+<div id="stage-2-adaptation" class="section level4">
+<h4>Stage 2: Adaptation</h4>
 <pre class="r"><code>adapted &lt;- run_stage(
   burned, 
   stage = &quot;adapt&quot;, 
@@ -991,8 +987,8 @@ sims</code></pre>
   n_cores = 10
 )</code></pre>
 </div>
-<div id="stage-3-sampling" class="section level5">
-<h5>Stage 3: Sampling</h5>
+<div id="stage-3-sampling" class="section level4">
+<h4>Stage 3: Sampling</h4>
 <pre class="r"><code>sampled &lt;- run_stage(
   adapted, 
   stage = &quot;sample&quot;,
@@ -1002,9 +998,13 @@ sims</code></pre>
   n_cores = 10
 )</code></pre>
 </div>
-<div id="save-to-samples-directory" class="section level5">
-<h5>Save to samples directory</h5>
+<div id="save-to-samples-directory" class="section level4">
+<h4>Save to samples directory</h4>
 <pre class="r"><code>save(sampled, file = &quot;samples/samples_ddm_combined_test.RData&quot;)</code></pre>
+</div>
+<div id="next-steps" class="section level4">
+<h4>Next steps</h4>
+<p>Now that we have our samples, we would now run sampling diagnositics, check model fit by simulating posterior predictives, and exploring relationships between tasks and models. Future versions of this tutorial will include convenience functions and example code for performing these analyses.</p>
 <p>See <a href="https://newcastlecl.github.io/samplerDoc/" class="uri">https://newcastlecl.github.io/samplerDoc/</a> for further information about the PMwG sampler.</p>
 </div>
 </div>
