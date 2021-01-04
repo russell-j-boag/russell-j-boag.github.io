@@ -42,8 +42,8 @@ Likelihood functions for many designs can be made faster by
 ‘vectorizing’ over observations that share a cell in the design
 matrix (e.g., with a single call to `dLBA()`, `dnorm()`, `ddiffusion()`,
 etc.). However, the loop method has the advantage of being more
-intuitive and easier to debug in in the initial stages of writing a
-model (despite its longer compute time).
+intuitive and easier to debug in the initial stages of writing a model
+(despite its longer compute time).
 
 Constructing a joint likelihood (e.g., the likelihood of N models of N
 data sets) simply involves putting each model’s likelihood loop inside
@@ -385,7 +385,7 @@ data$t1 %>%
 ``` r
 data$t1 %>%
   ggplot(aes(x = rt, fill = stim)) +
-  geom_histogram(stat = 'bin') +
+  geom_histogram(stat = "bin") +
   facet_wrap(. ~ cond1) +
   scale_x_continuous(limits = c(0, 3)) +
   theme_minimal()
@@ -569,7 +569,7 @@ data$t2 %>%
 ``` r
 data$t2 %>%
   ggplot(aes(x = rt, fill = stim)) +
-  geom_histogram(stat = 'bin') +
+  geom_histogram(stat = "bin") +
   facet_wrap(. ~ cond1) +
   scale_x_continuous(limits = c(0, 3)) +
   theme_minimal()

@@ -377,7 +377,7 @@ summary {
 <div id="the-likelihood-function" class="section level4">
 <h4>The likelihood function</h4>
 <p>At the heart of this code is the likelihood function. The likelihood function iterates over each trial in the design and computes either 1) the likelihood of the current observation in <code>data</code> given the current parameter values, or 2) a simulated observation generated from the model given the current parameters and cell of the experimental design.</p>
-<p>The bulk of the work when building a new model is writing the likelihood function. It is easiest to first write (and debug) the ‘stand alone’ likelihood of the model as applied to a single trial (row) in the data. From there you can easily iterate over trials using a for loop. Likelihood functions for many designs can be made faster by ‘vectorizing’ over observations that share a cell in the design matrix (e.g., with a single call to <code>dLBA()</code>, <code>dnorm()</code>, <code>ddiffusion()</code>, etc.). However, the loop method has the advantage of being more intuitive and easier to debug in in the initial stages of writing a model (despite its longer compute time).</p>
+<p>The bulk of the work when building a new model is writing the likelihood function. It is easiest to first write (and debug) the ‘stand alone’ likelihood of the model as applied to a single trial (row) in the data. From there you can easily iterate over trials using a for loop. Likelihood functions for many designs can be made faster by ‘vectorizing’ over observations that share a cell in the design matrix (e.g., with a single call to <code>dLBA()</code>, <code>dnorm()</code>, <code>ddiffusion()</code>, etc.). However, the loop method has the advantage of being more intuitive and easier to debug in the initial stages of writing a model (despite its longer compute time).</p>
 <p>Constructing a joint likelihood (e.g., the likelihood of N models of N data sets) simply involves putting each model’s likelihood loop inside the same likelihood function and passing that function a named list of data frames (e.g., the list <code>data</code> containing data frames <code>data$task1</code>, <code>data$task2</code>, <code>data$task3</code>, etc.). The returned likelihood is then just the grand sum of each model’s individual summed likelihood. Functions for simulating out of the models are computed in the same manner as the single case and are returned as a list of data frames (one for each task/model) at the end of the function.</p>
 </div>
 <div id="the-sampler" class="section level4">
@@ -604,7 +604,7 @@ data$t1</code></pre>
 <h4>RT histogram</h4>
 <pre class="r"><code>data$t1 %&gt;%
   ggplot(aes(x = rt, fill = stim)) +
-  geom_histogram(stat = 'bin') +
+  geom_histogram(stat = &quot;bin&quot;) +
   facet_wrap(. ~ cond1) +
   scale_x_continuous(limits = c(0, 3)) +
   theme_minimal()</code></pre>
@@ -765,7 +765,7 @@ data$t2</code></pre>
 <h4>RT histogram</h4>
 <pre class="r"><code>data$t2 %&gt;%
   ggplot(aes(x = rt, fill = stim)) +
-  geom_histogram(stat = 'bin') +
+  geom_histogram(stat = &quot;bin&quot;) +
   facet_wrap(. ~ cond1) +
   scale_x_continuous(limits = c(0, 3)) +
   theme_minimal()</code></pre>
