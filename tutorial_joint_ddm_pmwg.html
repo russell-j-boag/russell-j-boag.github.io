@@ -378,12 +378,13 @@ summary {
 <h4>The likelihood function</h4>
 <p>At the heart of this code is the likelihood function. The likelihood function iterates over each trial in the design and computes either 1) the likelihood of the current observation in <code>data</code> given the current parameter values, or 2) a simulated observation generated from the model given the current parameters and cell of the experimental design.</p>
 <p>The bulk of the work when building a new model is writing the likelihood function. It is easiest to first write (and debug) the ‘stand alone’ likelihood of the model as applied to a single trial (row) in the data. From there you can easily iterate over trials using a for loop. Likelihood functions for many designs can be made faster by ‘vectorizing’ over observations that share a cell in the design matrix (e.g., with a single call to <code>dLBA()</code>, <code>dnorm()</code>, <code>ddiffusion()</code>, etc.). However, the loop method has the advantage of being more intuitive and easier to debug in the initial stages of writing a model (despite its longer compute time).</p>
-<p>Constructing a joint likelihood (e.g., the likelihood of N models of N data sets) simply involves putting each model’s likelihood loop inside the same likelihood function and passing that function a named list of data frames (e.g., the list <code>data</code> containing data frames <code>data$task1</code>, <code>data$task2</code>, <code>data$task3</code>, etc.). The returned likelihood is then just the grand sum of each model’s individual summed likelihood. Functions for simulating out of the models are computed in the same manner as the single case and are returned as a list of data frames (one for each task/model) at the end of the function.</p>
+<p>Constructing a joint likelihood (e.g., the likelihood of N models of N data sets) simply involves putting each model’s likelihood loop inside the same likelihood function and passing that function a named list of data frames (e.g., the list <code>data</code> containing data frames <code>data$task1</code>, <code>data$task2</code>, <code>data$task3</code>, etc.). The returned likelihood is then just the grand sum of each model’s individual summed likelihood. Functions for simulating out of joint models are computed in the same manner as the single case and are returned as a list of data frames (one for each task/model) at the end of the function.</p>
 </div>
 <div id="the-sampler" class="section level4">
 <h4>The sampler</h4>
 <p>Running the Particle Metropolis within Gibbs (PMwG) sampler is straightforward - you simply pass the <code>data</code> (or <code>sims</code>) object, the likelihood function, and a vector of parameter names as arguments. See <a href="https://newcastlecl.github.io/samplerDoc/" class="uri">https://newcastlecl.github.io/samplerDoc/</a> for further information about the sampler.</p>
-<p>When working with a single model, covariation among parameters is accounted for hierarchically, via a multivariate normal distribution. The multivariate normal has a mean vector containing the hyper-level means of each parameter and variance-covariance matrix representing parameter correlations. When working with multiple models simultaneously (i.e., joint modeling), the mean vector is simply the union (concatenation) of each model’s individual mean vector (e.g., <code>all.means &lt;- c(m1.means, m2.means)</code>). The covariance matrix is similarly constructed based on this extended means vector. Variance shared among different tasks is thus accounted for hierarchically under the same overarching multivariate normal.</p>
+<p>When working with a single model, covariation among parameters is accounted for hierarchically, via a hyper-level multivariate normal distribution. The multivariate normal has a mean vector containing the hyper- or group-level means of each parameter and variance-covariance matrix representing parameter correlations.</p>
+<p>When working with multiple models simultaneously (i.e., joint modeling), the overall parameter vector is simply the union (concatenation) of each model’s individual parameter vector (e.g., <code>joint_p_vector &lt;- c(p_vector$task1, p_vector$task2)</code>). The covariance matrix is similarly constructed based on the length of this extended parameter vector. Variance shared among different tasks and model parameters is thus accounted for hierarchically under the same overarching multivariate normal.</p>
 <p><strong>TO DO</strong>: Add convenience functions for plotting parameter samples, model fits, posterior predictives/parameter recovery/model exploration, heatmap of hyper var-covar matrix, etc.</p>
 </div>
 </div>
@@ -440,11 +441,13 @@ design$t1 &lt;- expand_grid(subject = factor(rep(1:n_subs_t1, each = n_obs_t1)),
                          cond1 = factor(c(&quot;spd&quot;, &quot;acc&quot;))
 )
 design$t1</code></pre>
-<p>Here we pass our factor levels to <code>expand_grid()</code> to generate a factorial combination of all subjects, stimuli, and speed-accuracy cue conditions. Note that your empirical data should also be in a similarly tidy format with column names and factor levels that match those in your likelihood function.</p>
+<p>Here we pass our factor levels to <code>expand_grid()</code> to generate a factorial combination of all subjects, stimuli, and speed-accuracy cue conditions.</p>
+<p>Note that your empirical data should also be in a similarly tidy format with column names and factor levels that match those in your likelihood function. <strong>If you already have empirical data in a tidy format, you do not need to create a separate design matrix here, since this info is already contained in the first few columns of your data</strong>. In other words, <code>design$t1</code> is equivalent to <code>data$t1 %&gt;% select(subject, stim, cond1)</code>).</p>
 </div>
 <div id="create-a-vector-of-parameter-names" class="section level4">
 <h4>Create a vector of parameter names</h4>
-<p>Now we want to create a named vector containing all the unique estimated parameters in our design. First we extract the factor levels over which the parameters will vary. This is done by passing a vector of factor levels to <code>str_c()</code>, which appends them to the name of the target parameter. This creates a unique text string label for each parameter in the design. The likelihood and sampling functions use this to lookup parameters and pull out corresponding values. Ultimately, this lets us pass multiple similar models to the sampling functions without naming conflicts. Here we let a and v vary over condition and keep t0 fixed (i.e., we don’t pass it any factor levels via <code>unique()</code>).</p>
+<p>Now we want to create a named vector containing all the unique estimated parameters in our design. First we extract the factor levels over which the parameters will vary. This is done by passing a vector of factor levels to <code>str_c()</code>, which appends them to the name of the target parameter. This creates a unique text string label for each parameter in the design. The likelihood and sampling functions use this to lookup parameters and pull out corresponding values. Ultimately, this lets us pass multiple similar models to the sampling functions without naming conflicts.</p>
+<p>Here we let parameters <em>a</em> and <em>v</em> vary over condition and keep <em>t0</em> fixed (i.e., we don’t pass it any factor levels via <code>unique()</code>).</p>
 <pre class="r"><code>p_names$t1 &lt;- c(str_c(&quot;t1.a&quot;, unique(design$t1$cond1), sep = &quot;.&quot;), 
                 str_c(&quot;t1.v&quot;, unique(design$t1$cond1), sep = &quot;.&quot;),
                 str_c(&quot;t1.t0&quot;, sep = &quot;.&quot;)
@@ -453,7 +456,7 @@ p_names$t1</code></pre>
 </div>
 <div id="set-mean-parameter-values-to-simulate-from-or-to-use-as-priors" class="section level4">
 <h4>Set mean parameter values to simulate from (or to use as priors)</h4>
-<p>Note that (for now) the values of unestimated constants are set inside the likelihood function.</p>
+<p>Note that (for now) the values of unestimated constants are set inside the likelihood function (e.g., in the calls to <code>ddiffusion()</code> and <code>rdiffusion()</code>).</p>
 <pre class="r"><code>p_vector$t1 &lt;- c(2.0, 3.0,  # a's
                  1.0, 1.5,  # v's
                  0.2        # t0
@@ -634,7 +637,8 @@ p_names$t2</code></pre>
 </div>
 <div id="set-mean-parameter-values-to-simulate-from-or-to-use-as-priors-1" class="section level4">
 <h4>Set mean parameter values to simulate from (or to use as priors)</h4>
-<p>Note that (for now) the values of unestimated constants are set inside the likelihood function. Here we will just set them to half of model 1’s values.</p>
+<p>Note that (for now) the values of unestimated constants are set inside the likelihood function.</p>
+<p>Here we will just set them to half of model 1’s values to demonstrate.</p>
 <pre class="r"><code>p_vector$t2 &lt;- c(2.0, 3.0,  # a's
                  1.0, 1.5,  # v's
                  0.2        # t0
@@ -748,7 +752,7 @@ sims$t2</code></pre>
 </div>
 <div id="explore-data-1" class="section level2">
 <h2>Explore data</h2>
-<p>Again we treat <code>sims</code> as <code>data</code></p>
+<p>Again we will treat <code>sims</code> as <code>data</code> to demonstrate.</p>
 <pre class="r"><code>data &lt;- sims
 data$t2</code></pre>
 <div id="cell-counts-1" class="section level4">
@@ -776,22 +780,19 @@ data$t2</code></pre>
 <p>Now we are ready to combine the two models into a single likelihood. First let’s make a combined parameter vector containing all parameters.</p>
 <div id="make-combined-parameter-vector" class="section level4">
 <h4>Make combined parameter vector</h4>
-<pre class="r"><code>p_vector &lt;- c(p_vector$t1, p_vector$t2)
-p_vector</code></pre>
+<pre class="r"><code>joint_p_vector &lt;- c(p_vector$t1, p_vector$t2)
+joint_p_vector</code></pre>
 </div>
-</div>
-<div id="setup-for-sampling" class="section level2">
-<h2>Setup for sampling</h2>
 <div id="get-the-names-of-the-parameters-we-want-to-sample" class="section level4">
 <h4>Get the names of the parameters we want to sample</h4>
-<pre class="r"><code>pars &lt;- names(p_vector)
-pars</code></pre>
+<pre class="r"><code>joint_p_names &lt;- names(joint_p_vector)
+joint_p_names</code></pre>
 </div>
 <div id="set-priors-for-the-mean-and-variance-of-hyper-level-multivariate-normal" class="section level4">
 <h4>Set priors for the mean and variance of hyper-level multivariate normal</h4>
 <pre class="r"><code>priors &lt;- list(
-  theta_mu_mean = rep(0, length(pars)),
-  theta_mu_var = diag(rep(1, length(pars)))
+  theta_mu_mean = rep(0, length(joint_p_names)),
+  theta_mu_var = diag(rep(1, length(joint_p_names)))
 )
 priors</code></pre>
 </div>
@@ -927,12 +928,18 @@ priors</code></pre>
 <h2>Test likelihood function</h2>
 <div id="simulate-data-from-the-design-matrix-2" class="section level4">
 <h4>Simulate data from the design matrix</h4>
-<pre class="r"><code>sims &lt;- ll_joint_ddm(x = log(p_vector), data = data, sample = TRUE)
+<pre class="r"><code>sims &lt;- ll_joint_ddm(x = log(joint_p_vector), 
+                     data = data, 
+                     sample = TRUE
+                     )
 sims</code></pre>
 </div>
 <div id="return-likelihood-2" class="section level4">
 <h4>Return likelihood</h4>
-<pre class="r"><code>ll_joint_ddm(x = log(p_vector), data = sims, sample = FALSE)</code></pre>
+<pre class="r"><code>ll_joint_ddm(x = log(joint_p_vector), 
+             data = sims, 
+             sample = FALSE
+             )</code></pre>
 </div>
 </div>
 <div id="setup-sampling" class="section level2">
@@ -941,7 +948,7 @@ sims</code></pre>
 <h4>Initialize sampler</h4>
 <pre class="r"><code>sampler &lt;- pmwgs(
   data = data,
-  pars = pars,
+  pars = joint_p_names,
   prior = priors,
   ll_func = ll_joint_ddm
 )</code></pre>
@@ -949,8 +956,8 @@ sims</code></pre>
 <div id="set-start-points-optional" class="section level4">
 <h4>Set start points (optional)</h4>
 <pre class="r"><code>start_points &lt;- list(
-  mu = log(p_vector),
-  sig2 = diag(rep(.01, length(pars)))
+  mu = log(joint_p_vector),
+  sig2 = diag(rep(.01, length(joint_p_names)))
 )</code></pre>
 </div>
 <div id="initialize-start-points" class="section level4">

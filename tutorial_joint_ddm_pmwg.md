@@ -51,8 +51,8 @@ the same likelihood function and passing that function a named list of
 data frames (e.g., the list `data` containing data frames `data$task1`,
 `data$task2`, `data$task3`, etc.). The returned likelihood is then just
 the grand sum of each model’s individual summed likelihood. Functions
-for simulating out of the models are computed in the same manner as the
-single case and are returned as a list of data frames (one for each
+for simulating out of joint models are computed in the same manner as
+the single case and are returned as a list of data frames (one for each
 task/model) at the end of the function.
 
 #### The sampler
@@ -64,16 +64,19 @@ likelihood function, and a vector of parameter names as arguments. See
 about the sampler.
 
 When working with a single model, covariation among parameters is
-accounted for hierarchically, via a multivariate normal distribution.
-The multivariate normal has a mean vector containing the hyper-level
-means of each parameter and variance-covariance matrix representing
-parameter correlations. When working with multiple models simultaneously
-(i.e., joint modeling), the mean vector is simply the union
-(concatenation) of each model’s individual mean vector (e.g., `all.means
-<- c(m1.means, m2.means)`). The covariance matrix is similarly
-constructed based on this extended means vector. Variance shared among
-different tasks is thus accounted for hierarchically under the same
-overarching multivariate normal.
+accounted for hierarchically, via a hyper-level multivariate normal
+distribution. The multivariate normal has a mean vector containing the
+hyper- or group-level means of each parameter and variance-covariance
+matrix representing parameter correlations.
+
+When working with multiple models simultaneously (i.e., joint modeling),
+the overall parameter vector is simply the union (concatenation) of each
+model’s individual parameter vector (e.g., `joint_p_vector <-
+c(p_vector$task1, p_vector$task2)`). The covariance matrix is similarly
+constructed based on the length of this extended parameter vector.
+Variance shared among different tasks and model parameters is thus
+accounted for hierarchically under the same overarching multivariate
+normal.
 
 **TO DO**: Add convenience functions for plotting parameter samples,
 model fits, posterior predictives/parameter recovery/model exploration,
@@ -176,9 +179,15 @@ design$t1
 
 Here we pass our factor levels to `expand_grid()` to generate a
 factorial combination of all subjects, stimuli, and speed-accuracy cue
-conditions. Note that your empirical data should also be in a similarly
-tidy format with column names and factor levels that match those in your
-likelihood function.
+conditions.
+
+Note that your empirical data should also be in a similarly tidy format
+with column names and factor levels that match those in your likelihood
+function. **If you already have empirical data in a tidy format, you do
+not need to create a separate design matrix here, since this info is
+already contained in the first few columns of your data**. In other
+words, `design$t1` is equivalent to `data$t1 %>% select(subject, stim,
+cond1)`).
 
 #### Create a vector of parameter names
 
@@ -190,8 +199,10 @@ parameter. This creates a unique text string label for each parameter in
 the design. The likelihood and sampling functions use this to lookup
 parameters and pull out corresponding values. Ultimately, this lets us
 pass multiple similar models to the sampling functions without naming
-conflicts. Here we let a and v vary over condition and keep t0 fixed
-(i.e., we don’t pass it any factor levels via `unique()`).
+conflicts.
+
+Here we let parameters *a* and *v* vary over condition and keep *t0*
+fixed (i.e., we don’t pass it any factor levels via `unique()`).
 
 ``` r
 p_names$t1 <- c(str_c("t1.a", unique(design$t1$cond1), sep = "."), 
@@ -204,7 +215,8 @@ p_names$t1
 #### Set mean parameter values to simulate from (or to use as priors)
 
 Note that (for now) the values of unestimated constants are set inside
-the likelihood function.
+the likelihood function (e.g., in the calls to `ddiffusion()` and
+`rdiffusion()`).
 
 ``` r
 p_vector$t1 <- c(2.0, 3.0,  # a's
@@ -422,8 +434,9 @@ p_names$t2
 #### Set mean parameter values to simulate from (or to use as priors)
 
 Note that (for now) the values of unestimated constants are set inside
-the likelihood function. Here we will just set them to half of model 1’s
-values.
+the likelihood function.
+
+Here we will just set them to half of model 1’s values to demonstrate.
 
 ``` r
 p_vector$t2 <- c(2.0, 3.0,  # a's
@@ -543,7 +556,7 @@ ll_t2_ddm(x = log(p_vector$t2),
 
 ## Explore data
 
-Again we treat `sims` as `data`
+Again we will treat `sims` as `data` to demonstrate.
 
 ``` r
 data <- sims
@@ -583,25 +596,23 @@ First let’s make a combined parameter vector containing all parameters.
 #### Make combined parameter vector
 
 ``` r
-p_vector <- c(p_vector$t1, p_vector$t2)
-p_vector
+joint_p_vector <- c(p_vector$t1, p_vector$t2)
+joint_p_vector
 ```
-
-## Setup for sampling
 
 #### Get the names of the parameters we want to sample
 
 ``` r
-pars <- names(p_vector)
-pars
+joint_p_names <- names(joint_p_vector)
+joint_p_names
 ```
 
 #### Set priors for the mean and variance of hyper-level multivariate normal
 
 ``` r
 priors <- list(
-  theta_mu_mean = rep(0, length(pars)),
-  theta_mu_var = diag(rep(1, length(pars)))
+  theta_mu_mean = rep(0, length(joint_p_names)),
+  theta_mu_var = diag(rep(1, length(joint_p_names)))
 )
 priors
 ```
@@ -739,14 +750,20 @@ ll_joint_ddm <- function(x, data, sample = FALSE) {
 #### Simulate data from the design matrix
 
 ``` r
-sims <- ll_joint_ddm(x = log(p_vector), data = data, sample = TRUE)
+sims <- ll_joint_ddm(x = log(joint_p_vector), 
+                     data = data, 
+                     sample = TRUE
+                     )
 sims
 ```
 
 #### Return likelihood
 
 ``` r
-ll_joint_ddm(x = log(p_vector), data = sims, sample = FALSE)
+ll_joint_ddm(x = log(joint_p_vector), 
+             data = sims, 
+             sample = FALSE
+             )
 ```
 
 ## Setup sampling
@@ -756,7 +773,7 @@ ll_joint_ddm(x = log(p_vector), data = sims, sample = FALSE)
 ``` r
 sampler <- pmwgs(
   data = data,
-  pars = pars,
+  pars = joint_p_names,
   prior = priors,
   ll_func = ll_joint_ddm
 )
@@ -766,8 +783,8 @@ sampler <- pmwgs(
 
 ``` r
 start_points <- list(
-  mu = log(p_vector),
-  sig2 = diag(rep(.01, length(pars)))
+  mu = log(joint_p_vector),
+  sig2 = diag(rep(.01, length(joint_p_names)))
 )
 ```
 
