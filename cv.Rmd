@@ -26,7 +26,7 @@ output:
 ## Employment
 ##### __University of Amsterdam, 2019--Present__
 * Post-doctoral researcher -- *Integrative Model-based Cognitive Neuroscience Research Unit (IMCN)*, Faculty of Social and Behavioral Sciences
-* Guest lecturer -- *Master's in Methods and Statistics*, Amsterdam Brain and Cognition
+* Guest lecturer -- *Masters in Methods and Statistics*, Amsterdam Brain and Cognition
 
 ##### __University of Western Australia, 2015--2018__
 * Coordinating tutor -- *PSYC4418: Advanced Quantitative Methods in Psychology*
