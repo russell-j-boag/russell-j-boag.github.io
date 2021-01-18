@@ -815,6 +815,11 @@ priors</code></pre>
   
   # Undo the log transform
   x &lt;- exp(x) 
+  
+  # If being used as part of the pmwg package (on one subject), extract the 
+  # df (list of tibbles) and repace data, otherwise continue
+  if (is_tibble(data)) data &lt;- data$df[[data$subject]]
+  
   # Perform parameter checks 
   # Task 1 checks
   if (any(data$t1$rt &lt; x[&quot;t1.t0&quot;])) {
@@ -944,6 +949,23 @@ sims</code></pre>
 </div>
 <div id="setup-sampling" class="section level2">
 <h2>Setup sampling</h2>
+<div id="rearrange-data-for-pmwg-sampler" class="section level4">
+<h4>Rearrange <code>data</code> for <code>pmwg</code> sampler</h4>
+<p>The <code>pmwg</code> sampler expects <code>data</code> to be in data.frame format (square) with a column called <code>subject</code>. Thus we need to rearrange our data list.</p>
+<p>Here we bind the rows together and add a new column representing the task, then split them by subject and transform the resulting list to a tibble with two columns, <code>subject</code> as required by pmwg and <code>df</code> for the data associated with that subject.</p>
+<p>We then use a helper function <code>split_tibble</code> to split each tibble in the <code>df</code> column into a list with two elements, one tibble for each dataset.</p>
+<pre class="r"><code>split_tibble &lt;- function(x) {
+  lapply(x, function(x){
+    split(x, x$task)
+  })
+}
+
+data &lt;- data %&gt;%
+  bind_rows(.id = &quot;task&quot;) %&gt;%
+  split(.$subject) %&gt;%
+  tibble(subject = names(.), df = .) %&gt;%
+  mutate(df = split_tibble(df))</code></pre>
+</div>
 <div id="initialize-sampler" class="section level4">
 <h4>Initialize sampler</h4>
 <pre class="r"><code>sampler &lt;- pmwgs(

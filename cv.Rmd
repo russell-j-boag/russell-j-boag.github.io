@@ -1,9 +1,8 @@
 ---
 title: "Russell J. Boag"
 output:
-  html_document: default
   word_document: 
-    reference_docx: refdoc.docx
+  html_document: default
 ---
 
 #### __Computational cognitive modelling | Model-based cognitive neuroscience | Data science__
@@ -56,7 +55,7 @@ output:
 ***
 ## Journal articles
 * __Boag, R. J.__, Miletić, S., & Forstmann, B. U. (under review). Reinforcement learning and decision-making models: A new integrative framework and its applications. *Frontiers in Neuroscience*. 
-* Miletić, S., __Boag, R. J.__, Trutti, A. C., Forstmann, B. U., & Heathcote, A. (2020). A new model of decision processing in instrumental learning tasks. *bioRxiv*.
+* Miletić, S., __Boag, R. J.__, Trutti, A. C., Forstmann, B. U., & Heathcote, A. (2021). A new model of decision processing in instrumental learning tasks. *eLife*.
 * Trutti, A. C., Verschooren, S., Forstmann, B. U., & __Boag, R. J.__ (2020). Understanding subprocesses of working memory through the lens of model-based cognitive neuroscience. *Current Opinion in Behavioral Sciences*, 38, 57-65.
 * __Boag, R. J.__ (2020). Commentary: Dopamine-dependent loss aversion during effort-based decision-making. *Frontiers in Neuroscience*, 14.
 * Miletić, S., __Boag, R. J.__, & Forstmann, B. U. (2020). Mutual benefits: combining reinforcement learning with sequential sampling models. *Neuropsychologia*, 136, 107261.
