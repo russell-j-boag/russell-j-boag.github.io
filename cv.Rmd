@@ -1,120 +1,204 @@
 ---
-title: "Russell J. Boag"
+title: "Curriculum Vitae"
+author: "Russell J. Boag"
+date: "2025"
+email: "rboag@outlook.com"
 output:
-  word_document: 
-  html_document: default
+  pdf_document:
+    toc: false
+    number_sections: false
+    latex_engine: xelatex
+  html_document:
+    toc: false
+    df_print: paged
+fontsize: 12pt
+geometry: margin=1in
+header-includes:
+- \usepackage{fontspec}
+- \setmainfont{Arial}
+- \setsansfont{Arial}
+- \setmonofont{Arial}
+- \usepackage{setspace}
+- \setstretch{1.1}
+- \usepackage{sectsty}
+- \sectionfont{\large}
+- \subsectionfont{\large}
+- \subsubsectionfont{\normalsize}
+- \usepackage{titling}
+- \pretitle{\begin{center}\LARGE}
+- \posttitle{\par\end{center}\vskip 0.5em}
+- \preauthor{\begin{center}\large}
+- \postauthor{\par\end{center}\vskip 0.5em}
+- \predate{\begin{center}\large}
+- \postdate{\par\end{center}\vskip 1em}
 ---
 
-#### __Computational cognitive modelling | Model-based cognitive neuroscience | Data science__
+```{=html}
+<style>
+h1.title {
+  text-align: center;
+}
+h4.date {
+  text-align: center;
+}
+h4.author {
+  text-align: center;
+}
+</style>
+```
 
-#### __Email: r.j.boag@uva.nl__
+### Computational cognitive modelling | Data science | Task design & simulator programming
 
-***
-## Education
-##### __University of Western Australia, 2015--2018__
-* PhD in computational cognitive modelling 
-* Applied mathematics major sequence
+# **Research Focus**
+My research uses computational cognitive models to understand human cognition. I focus on quantitative approaches including cognitive process modelling, joint modelling, and advanced Bayesian data-analytic methods. I have extensive expertise in R and Python for experiment programming, modelling, and statistical analysis. My work has been published in high-impact journals across cognitive neuroscience, cognitive psychology, quantitative methods, and applied (Human Factors) psychology. I often serve as a reviewer for top quantitative journals including the Journal of Mathematical Psychology, Behavior Research Methods, Psychological Methods, and Computational Brain and Behavior. 
 
-##### __University of Melbourne, 2014__
-* Bachelor of Science (Honors) in psychology
+# **Employment**
+**University of Western Australia (2026 – Present)**  
+Research fellow, Human Factors & Applied Cognition Lab
 
-##### __Monash University, 2010--2013__
-* Bachelor of Arts and Bachelor of Science
+**University of Newcastle (2025 – 2026)**  
+Research fellow, Cognitive Psychology Laboratory, School of Psychological Sciences
 
-***
-## Employment
-##### __University of Amsterdam, 2019--Present__
-* Post-doctoral researcher -- *Integrative Model-based Cognitive Neuroscience Research Unit (IMCN)*, Faculty of Social and Behavioral Sciences
-* Guest lecturer -- *Masters in Methods and Statistics*, Amsterdam Brain and Cognition
+**University of Amsterdam (2023 – 2025)**  
+Research fellow, Integrative Model-based Cognitive Neuroscience Research Unit  
+Guest lecturer, Introduction to Neuroscientific Methods and Anatomy
 
-##### __University of Western Australia, 2015--2018__
-* Coordinating tutor -- *PSYC4418: Advanced Quantitative Methods in Psychology*
-* Tutor -- *PSYC3302: Psychological Testing and Assessment*
-* Coordinating tutor -- *PSYC4418: Psychological Research and Data*
-* Coordinating tutor -- *PSYC3309: Industrial and Organisational Psychology*
-* Coordinating tutor --  *PSYC2209: Industrial and Organisational Psychology*
-* Tutor -- *PSYC3301: Psychological Research Methods*
-* Tutor -- *PSYC3302: Psychological Testing and Assessment*
+**University of Western Australia (2021 – 2023)**  
+Research fellow, Human Factors & Applied Cognition Lab
 
-##### __Research Assistant, 2017__
-* *Human Factors Lab*, University of Western Australia 
-* Responsible for developing on-screen geometry for Air-Traffic Control simulations, collaborating on experimental design, programming ATC simulator software
+**University of Amsterdam (2019 – 2021)**  
+Research fellow, Integrative Model-based Cognitive Neuroscience Research Unit  
+Guest lecturer, Quantitative Methods
 
-##### __Research Assistant, 2015__
-* *CARE-LAB*, University of Western Australia 
-* Responsible for participant recruitment, data collection, operation of eye-tracking equipment and software
+**University of Western Australia (2015 – 2018)**  
+Coordinating tutor / Tutor, multiple courses including: 
 
-##### __Research Assistant, 2013--2015__
-* *Monash University Accident Research Centre*
-* Responsible for database management, data cleaning, statistical analysis, data collection, piloting psychophysiological measures, scientific report writing, installation of data recording devices in study vehicles
+- Advanced Quantitative Methods in Psychology (PSYC4418)
+- Psychological Testing & Assessment (PSYC3302)
+- Psychological Research & Data (PSYC4418)
+- Industrial & Organisational Psychology (PSYC3309, PSYC2209)
+- Psychological Research Methods (PSYC3301)
 
-##### __Research Intern, 2013--2014__
-* *Applied Cognition Lab, Aerospace Division*, Defence Science and Technology Organisation
-* Responsible for participant recruitment, data collection, data analysis
+# **Research Assistant Roles**
+**University of Western Australia Human Factors Lab (2017)**
+Developed on-screen geometry and simulation software for air-traffic control studies.
 
-***
-## Journal articles
-* __Boag, R. J.__, Miletić, S., & Forstmann, B. U. (under review). Reinforcement learning and decision-making models: A new integrative framework and its applications. *Frontiers in Neuroscience*. 
-* Miletić, S., __Boag, R. J.__, Trutti, A. C., Forstmann, B. U., & Heathcote, A. (2021). A new model of decision processing in instrumental learning tasks. *eLife*.
-* Trutti, A. C., Verschooren, S., Forstmann, B. U., & __Boag, R. J.__ (2020). Understanding subprocesses of working memory through the lens of model-based cognitive neuroscience. *Current Opinion in Behavioral Sciences*, 38, 57-65.
-* __Boag, R. J.__ (2020). Commentary: Dopamine-dependent loss aversion during effort-based decision-making. *Frontiers in Neuroscience*, 14.
-* Miletić, S., __Boag, R. J.__, & Forstmann, B. U. (2020). Mutual benefits: combining reinforcement learning with sequential sampling models. *Neuropsychologia*, 136, 107261.
-* Wilson, M. D., __Boag, R. J.__, & Strickland, L. (2019). All models are wrong, some are useful, but are they reproducible? Commentary on Lee et al.(2019). *Computational Brain & Behavior*, 2(3-4), 239-241.
-* __Boag, R. J.__, Strickland, L., Loft, S., & Heathcote, A. (2019). Strategic attention and decision control support prospective memory in a complex dual-task environment. *Cognition*, 191, 103974.
-* __Boag, R. J.__, Strickland, L., Heathcote, A., Neal, A., & Loft, S. (2019). Cognitive control and capacity for prospective memory in complex dynamic environments. *Journal of Experimental Psychology: General*, 148(12), 2181.
-* Sewell, D. K., Jach, H. K., __Boag, R. J.__, & Van Heer, C. A. (2019). Combining error-driven models of associative learning with evidence accumulation models of decision-making. *Psychonomic Bulletin & Review*, 26(3), 868-893.
-* Koppel, S., Kuo, J., Berecki-Gisolf, J., __Boag, R. J.__, Hue, Y. X., & Charlton, J. L. (2015). Examining physiological responses across different driving maneuvers during an on-road driving task: a pilot study comparing older and younger drivers. *Traffic Injury Prevention*, 16(3), 225-233.
+**University of Western Australia CARE-LAB (2015)**
+Participant recruitment, data collection, eye-tracking operations.
 
-***
-## Book chapters
-* __Boag, R. J.__, Miletić, S., Trutti, A. C., & Forstmann, B. U. (2021). *Toward a model-based cognitive neuroscience of working memory subprocesses*. Introduction to Model-based Cognitive Neuroscience, 2nd edition.
+**Monash University Accident Research Centre (2013 – 2015)**
+Data management, psychophysiological piloting, statistical analysis, device installation.
 
-***
-## Conference papers & talks
-* Strickland, L., Bowden, V., __Boag, R. J.__, Heathcote, A. & Loft, S. (2020). Modelling how humans use decision aids in simulated air traffic control. *Australasian Mathematical Psychology Conference*, Sydney, Australia.
-*  __Boag, R. J.__, & Miletić, S. (2019). Accumulate-to-threshold models of decision making for human and animal research. *Netherlands Institute for Neuroscience*, Amsterdam, The Netherlands.
-* __Boag, R. J.__, Miletić, S., Mathiopoulou, V., & Forstmann, B. U. (2019). Speed and accuracy in learning: A combined Q-learning diffusion decision model analysis. *Cognitive Computational Neuroscience*, Berlin, Germany.
-* __Boag, R. J.__, Strickland, L., Heathcote, A., & Loft, S. (2018). Modelling cognitive control mechanisms in simulated air traffic control. *Australasian Mathematical Psychology Conference*, Perth, Australia.
-* __Boag, R. J.__, Strickland, L., Heathcote, A., & Loft, S. (2018). Modelling prospective memory and decision making in simulated air traffic control. *5th International Conference on Prospective Memory*, Melbourne, Australia.
-* __Boag, R. J.__, Strickland, L., Neal, A., Heathcote, A., & Loft, S. (2017). Adaptive decision making in simulated air traffic control. *Australasian Mathematical Psychology Conference*, Brisbane, Australia.
-* Vuckovic, A., __Boag, R. J.__, & Martin, R. (2014). Using cognitive models in applied settings: a sequential sampling model of the unmanned aerial vehicle operator. *Australasian Mathematical Psychology Conference*, Canberra, Australia.
+**Defence Science and Technology Organisation, Applied Cognition Lab, Aerospace Division (2013 – 2014)**
+Participant recruitment and data analysis.
 
-***
-## Doctoral dissertation
-* __Boag, R. J.__ (2019). *A computational theory of cognitive control and attentional capacity in complex multiple-task environments*. University of Western Australia.
+# **Education**
 
-***
-## Honors & awards
-##### __Commendation for Teaching Excellence, 2018__
-* University of Western Australia
-* Awarded for achieving the highest student feedback score while coordinating tutor for the unit *PSYC4418: Advanced Quantitative Methods in Psychology*
+**University of Western Australia (2015 – 2018)**  
+PhD in Computational Cognitive Modelling, School of Psychological Science  
+Major sequence in Applied Mathematics
 
-##### __APS Prize in Psychology, 2014__
-* Australian Psychological Society
-* Awarded to the student attaining the highest overall mark in the fourth-year psychology program
+**University of Melbourne (2014)**  
+Bachelor of Science (Honours) in Psychology
 
-***
-## Research & technical skills
-* I have extensive experience with all stages of the data analysis and modelling workflow, including: data cleaning and visualization; model building, fitting, selection, and posterior inference; and using simulations for model validation, parameter recovery, and model exploration. I am currently developing a joint neuro-cognitive modelling pipeline for simulating and fitting cognitive and neurophysiological models to multiple data sources (e.g., EEG + fMRI + behaviour) simultaneously within a fully Bayesian framework. I also have extensive experience analyzing data using conventional and hierarchical Bayesian statistical models (GLM/GLMMs).
-* I have extensive experience with the R programming language. I use Git for version control and GitHub as an open record of my modelling and analysis code. I have experience using research computing servers to model large datasets in parallel. 
-* I have extensive experience writing scientific research reports for publication in high-impact journals, and an aptitude for public speaking, as demonstrated by my many conference talks and substantial teaching experience. 
-* I have extensive experience designing and running scientific experiments and collecting data.
-* I have also developed management skills in my role as a post-doc at the University of Amsterdam, in which I have coordinated teams from The Netherlands, Belgium, Germany, and Australia to produce high-quality research and scientific publications. I also organized several conferences and modelling workshops, and have experience coordinating lab meeting guest speakers. 
+**Monash University (2010 – 2013)**  
+Bachelor of Arts / Bachelor of Science
 
+# **Top Journal Articles**
 
-***
-## Referees
-#####  __Dr Birte Forstmann__
-* University of Amsterdam
-* Phone: +31 61 532 4988
-* Email: buforstmann@gmail.com
+**Boag, R. J.**, Strickland, L., Heathcote, A., Neal, A., Palada, H., & Loft, S. (2023). *Evidence accumulation modelling in the wild: Understanding safety-critical decisions.* **Trends in Cognitive Sciences**, 27(2), 175–188.
 
-#####  __Professor Shayne Loft__
-* University of Western Australia
-* Phone: +61 86 488 4610
-* Email: shayne.loft@uwa.edu.au
+**Boag, R. J.**, Innes, R. J., Stevenson, N., Bahg, G., Busemeyer, J. R., Cox, G. E., … Forstmann, B. U. (2025). *An expert guide to planning experimental tasks for evidence-accumulation modeling.* **Advances in Methods and Practices in Psychological Science**, 8(2).
 
-#####  __Professor Andrew Heathcote__
-* University of Amsterdam | University of Newcastle
-* Phone: +61 36 226 1763
-* Email: andrew.heathcote@utas.edu.au
+**Boag, R. J.**, Strickland, L., Heathcote, A., & Loft, S. (2025). *The dynamics of stability and flexibility: How attentional and cognitive control support multitasking under time pressure.* **Journal of Experimental Psychology: General.**
+
+Strickland, L., Heathcote, A., Bowden, V. K., **Boag, R. J.**, Wilson, M. D., Khan, S., & Loft, S. (2021). *Inhibitory cognitive control allows automated advice to improve accuracy while minimizing misuse.* **Psychological Science**, 32(11), 1768–1781.
+
+Trutti, A. C., Verschooren, S., Forstmann, B. U., & **Boag, R. J.** (2021). *Understanding subprocesses of working memory through model-based cognitive neuroscience.* **Current Opinion in Behavioral Sciences**, 38, 57–65.
+
+Miletić, S., **Boag, R. J.**, Trutti, A. C., Stevenson, N., Forstmann, B. U., & Heathcote, A. (2021). *A new model of decision processing in instrumental learning tasks.* **eLife**, 10, e63055.
+
+Miletić, S., **Boag, R. J.**, & Forstmann, B. U. (2020). *Mutual benefits: Combining reinforcement learning with sequential sampling models.* **Neuropsychologia**, 136, 107261.
+
+**Boag, R. J.**, Strickland, L., Heathcote, A., Neal, A., & Loft, S. (2019). *Cognitive control and capacity for prospective memory in complex environments.* **Journal of Experimental Psychology: General**, 148(12), 2181.
+
+Sewell, D. K., Jach, H. K., **Boag, R. J.**, & Van Heer, C. A. (2019). *Combining error-driven associative learning models with evidence-accumulation decision models.* **Psychonomic Bulletin & Review**, 26(3), 868–893.
+
+**Boag, R. J.**, Strickland, L., Loft, S., & Heathcote, A. (2019). *Strategic attention and decision control support prospective memory in dual-task environments.* **Cognition**, 191, 103974.
+
+# **Conference Papers & Talks**
+
+**Boag, R. J.**, Yanguez, M., Weigard, A., Seitz, A., Jaeggi, S. M., & Heathcote, A. (2026). *A diffusion-decision account of how n-back training changes cognition.* Australasian Mathematical Psychology Conference, Singapore.
+
+**Boag, R. J.**, Gheza, D., Kool, W., Braver, T., Heathcote, A., Forstmann, B., & Hawkins, G. (2025). *Converging evidence for mind wandering from EEG, behavior, and self-report.* Psychonomic Society Annual Meeting, Denver.
+
+Yanguez, M., **Boag, R. J.**, Weigard, A., Seitz, A., Jaeggi, S. M., & Heathcote, A. (2025). *A diffusion-decision model to capture individual differences in mechanisms of n-back training.* Psychonomic Society Annual Meeting.
+
+**Boag, R. J.**, Strickland, L., Heathcote, A., & Loft, S. (2025). *Automation use and capacity competition in multitasking.* Society for Mathematical Psychology, Columbus, Ohio.
+
+Strickland, L., Heathcote, A., **Boag, R. J.**, Stevenson, N., & Loft, S. (2025). *An adaptive evidence accumulation model of conflict detection decisions.* Society for Mathematical Psychology Annual Meeting, Columbus, Ohio, USA.
+
+**Boag, R. J.**, Strickland, L., Heathcote, A., & Loft, S. (2025). *Stability and flexibility in the red zone.* Australasian Mathematical Psychology Conference, Coogee Beach, Australia.
+  
+Heathcote, A., Yanguez, M., Weigard, A., & **Boag, R. J.** (2025). *A model of the go/no-go n-back task.* Australasian Mathematical Psychology Conference, Coogee Beach, Australia.
+
+Strickland, L., Heathcote, A., **Boag, R. J.**, Stevenson, N., & Loft, S. (2025). *An adaptive evidence-accumulation model of conflict detection decisions.* Australasian Mathematical Psychology Conference, Coogee Beach, Australia.
+  
+**Boag, R. J.**, Strickland, L., & Loft, S. (2023). *Automation, attention, and cognitive control in multitasking.* Australasian Mathematical Psychology Conference, Melbourne, Australia.
+
+**Boag, R. J.**, Strickland, L., Heathcote, A., Neal, A., Palada, H., & Loft, S. (2023). *The application of evidence accumulation modelling to understand how humans adapt to task demands in the modern workplace.* Australasian Mathematical Psychology Conference, Melbourne, Australia.
+
+Strickland, L., **Boag, R. J.**, Heathcote, A., Bowden, V., Farrell, S., Wilson, M., Hutchinson, J., & Loft, S. (2023). *Understanding how humans adapt to the reliability of automated advice using cognitive models of learning and decision making.* Australasian Mathematical Psychology Conference, Melbourne, Australia.  
+  
+Strickland, L., Bowden, V., **Boag, R. J.**, Heathcote, A., & Loft, S. (2020). *Modelling how humans use decision aids in simulated air traffic control.* Australasian Mathematical Psychology Conference, Sydney, Australia.
+
+**Boag, R. J.**, & Miletic, S. (2019). *Accumulate-to-threshold models of decision making for human and animal research.* Netherlands Institute for Neuroscience, Amsterdam, The Netherlands.
+  
+**Boag, R. J.**, Miletic, S., Mathiopoulou, V., & Forstmann, B. U. (2019). *Speed and accuracy in learning: A combined Q-learning diffusion decision model analysis.* Conference on Cognitive Computational Neuroscience, Berlin, Germany.
+
+**Boag, R. J.**, Strickland, L., Heathcote, A., & Loft, S. (2018). *Modelling cognitive control mechanisms in simulated air traffic control.* Australasian Mathematical Psychology Conference, Perth, Australia.
+  
+**Boag, R. J.**, Strickland, L., Heathcote, A., & Loft, S. (2018). *Modelling prospective memory and decision making in simulated air traffic control.* 5th International Conference on Prospective Memory, Melbourne, Australia.
+
+**Boag, R. J.**, Strickland, L., Neal, A., Heathcote, A., & Loft, S. (2017). *Adaptive decision making in simulated air traffic control.* Australasian Mathematical Psychology Conference, Brisbane, Australia.
+
+Vuckovic, A., **Boag, R. J.**, & Martin, R. (2014). *Using cognitive models in applied settings: A sequential sampling model of the unmanned aerial vehicle operator.* Australasian Mathematical Psychology Conference, Canberra, Australia.
+  
+
+# **Book Chapters**
+
+**Boag, R. J.**, Miletić, S., Trutti, A. C., & Forstmann, B. U. (2024). *Toward a model-based cognitive neuroscience of working memory subprocesses.* In *An Introduction to Model-Based Cognitive Neuroscience* (pp. 265–302). Springer.
+
+Strickland, L. & **Boag, R. J.** (2022). *Tradeoffs in uncertain decision making.* In *The Oxford Handbook of Uncertainty Management in Work Organizations*. Oxford University Press.
+
+# **Doctoral Dissertation**
+
+**Boag, R. J.** (2019). *A computational theory of cognitive control and attentional capacity in complex multiple-task environments.* University of Western Australia.
+
+## **Honors & Awards**
+
+**Commendation for Teaching Excellence** (2018), University of Western Australia  
+**APS Prize in Psychology** (2014), Australian Psychological Society
+
+# **Grants & Funding**
+
+**Model-based Cognitive Neuroscience Summer School** (2024), €4000  
+University of Amsterdam
+
+# **Professional referees**
+
+**Prof. Shayne Loft**  
+School of Psychological Sciences, University of Western Australia  
+Email: shayne.loft@uwa.edu.au
+
+**Prof. Birte Forstmann**  
+Integrative Model-based Cognitive Neuroscience Research Unit, University of Amsterdam  
+Email: buforstmann@gmail.com
+
+**Prof. Andrew Heathcote**  
+Department of Psychology, University of Amsterdam / University of Newcastle  
+Email: ajheathcote@gmail.com
+
+**Dr. Guy Hawkins**  
+School of Psychological Sciences, University of Newcastle  
+Email: guy.hawkins@newcastle.edu.au
