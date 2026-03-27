@@ -1,3 +1,3 @@
-# russell-j-boag.github.io
+# CV
 
-CV: https://russell-j-boag.github.io
+https://russell-j-boag.github.io
